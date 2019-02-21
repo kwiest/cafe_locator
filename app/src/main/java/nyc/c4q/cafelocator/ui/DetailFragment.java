@@ -67,6 +67,7 @@ public class DetailFragment extends Fragment {
 
             List<StoreHours> temp =storeHolder.getStoreHoursList();
             temp.add(temp.size() , temp.get(0));
+            
             temp.remove(0);
             hour_recycler.setAdapter(new HoursAdaptor(temp));
         }
