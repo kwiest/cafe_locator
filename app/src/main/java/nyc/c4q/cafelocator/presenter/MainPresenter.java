@@ -129,9 +129,11 @@ public class MainPresenter implements MainPresenterInterface {
                 tempAddress = resultsNear.address.split("<br />");
             } else {
                 tempAddress = resultsNear.address.split("<br/>");
+
             }
             resultsNear.setStreet_address(tempAddress[0].replaceAll("\r\n", ""));
             String spaceRemoved = tempAddress[tempAddress.length-1].replaceAll("\r\n", "");
+            Log.e("street ddressm,",tempAddress[0]);
             resultsNear.setCity_address(spaceRemoved);
         } else {
             resultsNear.setCity_address("Coming Soon");
