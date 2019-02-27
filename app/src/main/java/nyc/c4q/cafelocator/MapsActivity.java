@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void listOfCafesFound(List<ResultsNear> resultsNear) {
+        Log.e("Maps Size",resultsNear.size()+"");
         listFragment.updateArticleView(resultsNear);
     }
 
