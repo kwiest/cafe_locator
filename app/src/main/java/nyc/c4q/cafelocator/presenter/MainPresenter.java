@@ -41,7 +41,6 @@ public class MainPresenter implements MainPresenterInterface {
     private List<ResultsNear> listOfStores;
     private CompositeDisposable disposable = new CompositeDisposable();
     private Gson gson = new Gson();
-    String[] temp;
 
     @Inject
     public MainPresenter(LocatorService locatorService) {
@@ -77,18 +76,18 @@ public class MainPresenter implements MainPresenterInterface {
                 .map(response -> response.cafes.resultsNear)
                 .map(resultsNears -> {
                     for (int i = 0; i < resultsNears.size(); i++) {
-                        List<StoreHours> temp = conveter(resultsNears.get(i).jsonObject);
+                        List<StoreHours> tempStoreHoursList = conveter(resultsNears.get(i).jsonObject);
                         addressMapper(resultsNears.get(i));
-                        resultsNears.get(i).setStoreHoursList(temp);
+                        resultsNears.get(i).setStoreHoursList(tempStoreHoursList);
                     }
                     return resultsNears;
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultsNears -> {
                     loadMarkersOnMap(resultsNears);
-                    if (resultsNears.isEmpty() ||resultsNears==null){
+                    if (resultsNears.isEmpty()) {
                         mainViewInter.nothingFound();
-                    } else{
+                    } else {
                         listOfStores = resultsNears;
                         mainViewInter.listOfCafesFound(resultsNears);
                     }
@@ -125,13 +124,14 @@ public class MainPresenter implements MainPresenterInterface {
 
     private void addressMapper(ResultsNear resultsNear) {
         if (resultsNear.address != null) {
+            String[] tempAddress;
             if (resultsNear.address.contains("<br />")) {
-                temp = resultsNear.address.split("<br />");
-            } else if (resultsNear.address.contains("<br>")) {
-                temp = resultsNear.address.split("<br>");
+                tempAddress = resultsNear.address.split("<br />");
+            } else {
+                tempAddress = resultsNear.address.split("<br/>");
             }
-            resultsNear.setStreet_address(temp[0].replaceAll("\r\n", ""));
-            String spaceRemoved = temp[1].replaceAll("\r\n", "");
+            resultsNear.setStreet_address(tempAddress[0].replaceAll("\r\n", ""));
+            String spaceRemoved = tempAddress[tempAddress.length-1].replaceAll("\r\n", "");
             resultsNear.setCity_address(spaceRemoved);
         } else {
             resultsNear.setCity_address("Coming Soon");
@@ -153,6 +153,7 @@ public class MainPresenter implements MainPresenterInterface {
             StoreHours storeHours = new StoreHours();
             Log.e("Day", entry.getKey());
             storeHours.setDayOfWeek(convertToDayOfWeek(entry.getKey()));
+
             if (entry.getValue().toString().length() <= 10) {
                 storeHours.setOpen(false);
             } else {
@@ -211,6 +212,3 @@ public class MainPresenter implements MainPresenterInterface {
         return time;
     }
 }
-
-
-
